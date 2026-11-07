@@ -120,3 +120,4 @@ SECTION 1: CLINICAL COMPLIANCE & PRIVACY
         })
         assert out_res.status_code == 200
         assert out_res.json()["outcome"] == "WON"
+

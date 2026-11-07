@@ -103,3 +103,4 @@ This boots both the FastAPI backend (`http://localhost:8000`) and the Next.js fr
 - **Git Exclusions**: `.env`, `backend/.env`, and `precedent.db` are explicitly matched in `.gitignore`.
 - **Zero Exposed Keys**: Verified that no secrets or tokens exist in client bundles, public templates, or git commits.
 - **Data Persistence**: Relational SQLite database survives application and process restarts with full ACID transaction safety.
+
