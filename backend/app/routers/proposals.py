@@ -223,3 +223,4 @@ async def generate_response_for_question(payload: GenerateAnswerRequest, db: Ses
             for a in contradiction_alerts
         ]
     }
+

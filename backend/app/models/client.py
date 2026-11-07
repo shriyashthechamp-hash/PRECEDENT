@@ -31,3 +31,4 @@ class CompanyProfile(Base):
     description = Column(Text, nullable=True)
     facts = Column(JSON, default=dict) # approved corporate facts
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+

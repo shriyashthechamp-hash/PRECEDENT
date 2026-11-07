@@ -31,3 +31,4 @@ echo "  → API Documentation: http://localhost:8000/docs"
 echo "=========================================================="
 
 wait $FRONTEND_PID
+

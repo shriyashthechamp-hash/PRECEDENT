@@ -33,3 +33,4 @@ class ReviewCorrectionEvent(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     
     response = relationship("ProposalResponse", back_populates="review_events")
+

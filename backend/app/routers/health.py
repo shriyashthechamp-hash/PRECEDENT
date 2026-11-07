@@ -39,3 +39,4 @@ async def check_system_health(db: Session = Depends(get_db)):
         "environment": settings.ENVIRONMENT,
         "synthetic_demo_mode": True
     }
+

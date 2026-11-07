@@ -36,3 +36,4 @@ class BidOutcome(Base):
     weaknesses_noted = Column(Text, nullable=True)
     recorded_by = Column(String(128), default="Commercial Director")
     recorded_at = Column(DateTime, default=datetime.utcnow)
+

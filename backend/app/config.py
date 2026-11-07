@@ -1,6 +1,23 @@
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
+
+# Explicitly search and load .env from current dir or parent dir
+current_dir = Path(__file__).resolve().parent
+backend_dir = current_dir.parent
+root_dir = backend_dir.parent
+
+env_paths = [
+    root_dir / ".env",
+    backend_dir / ".env",
+    Path(".env")
+]
+
+for p in env_paths:
+    if p.exists():
+        load_dotenv(dotenv_path=p, override=False)
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "PRECEDENT"
@@ -8,29 +25,33 @@ class Settings(BaseSettings):
     API_PREFIX: str = "/api"
     
     # Environment
-    ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
-    LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
+    ENVIRONMENT: str = "development"
+    LOG_LEVEL: str = "INFO"
     
     # Database
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./precedent.db")
+    DATABASE_URL: str = "sqlite:///./precedent.db"
     
     # AI Inference (Groq)
-    GROQ_API_KEY: Optional[str] = os.getenv("GROQ_API_KEY", None)
-    GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-    GROQ_FALLBACK_MODEL: str = os.getenv("GROQ_FALLBACK_MODEL", "llama-3.1-8b-instant")
+    GROQ_API_KEY: Optional[str] = None
+    GROQ_MODEL: str = "openai/gpt-oss-120b"
+    GROQ_FALLBACK_MODEL: str = "openai/gpt-oss-20b"
     
     # Hindsight Memory Engine
-    HINDSIGHT_API_URL: str = os.getenv("HINDSIGHT_API_URL", "http://localhost:8888")
-    HINDSIGHT_API_KEY: Optional[str] = os.getenv("HINDSIGHT_API_KEY", None)
-    HINDSIGHT_BANK_ID: str = os.getenv("HINDSIGHT_BANK_ID", "precedent-institutional-memory")
+    HINDSIGHT_API_URL: str = "http://localhost:8888"
+    HINDSIGHT_API_KEY: Optional[str] = None
+    HINDSIGHT_BANK_ID: str = "precedent-institutional-memory"
     
     # Security & Org
-    DEFAULT_ORGANIZATION_ID: str = os.getenv("DEFAULT_ORGANIZATION_ID", "org_precedent_demo")
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "precedent-secret-key-change-in-production")
+    DEFAULT_ORGANIZATION_ID: str = "org_precedent_demo"
+    SECRET_KEY: str = "precedent-secret-key-change-in-production"
     
     # File Storage
-    UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", "uploads")
+    UPLOAD_DIR: str = "uploads"
     
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=(".env", "../.env"),
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
 
 settings = Settings()

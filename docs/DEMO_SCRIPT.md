@@ -44,3 +44,4 @@
 - **Visual**: Open **Intelligence Explorer** -> `Reflect`.
 - **Output**: Higher-order synthesis: *"Healthcare evaluators penalize vague 24/7 claims. Proposals specifying tiered escalation SLAs have a 92% approval rate."*
 - **Closing**: "Documents are inputs. Experiences and outcomes are the intelligence."
+

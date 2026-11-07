@@ -371,3 +371,4 @@ export default function ProposalWorkspacePage({ params }: { params: Promise<{ id
     </div>
   );
 }
+

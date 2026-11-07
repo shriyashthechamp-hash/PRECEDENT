@@ -5,11 +5,11 @@
 > *Every bid builds a better next bid.*
 
 ## Current Architecture
-- **Frontend**: Next.js 15+ / React 19 / TypeScript / Tailwind CSS / Lucide Icons. High-density enterprise SaaS interface inspired by Linear and Palantir. Statically verified with zero build or lint warnings.
+- **Frontend**: Next.js 15+ / React 19 / TypeScript / Tailwind CSS / Lucide Icons. High-density enterprise SaaS interface inspired by Linear and Palantir. Statically verified with zero build or lint warnings across all 15 routes.
 - **Backend**: Python 3.15+ FastAPI asynchronous architecture (`backend/app`), structured Pydantic v2 schemas, automated PDF & DOCX question extractor, deterministic rule validation engine, and audit logging.
 - **Relational Persistence**: SQLAlchemy SQLite engine (`backend/precedent.db`) with full transactional constraints, cascading deletes, foreign keys, and indexed query tables (`proposals`, `rfp_questions`, `proposal_responses`, `review_correction_events`, `claim_ledger`, `contradiction_alerts`, `bid_outcomes`, `clients`, `sectors`).
-- **AI Proposal Engine**: Groq API integration (`llama-3.3-70b-versatile` / `llama-3.1-8b-instant`) with structured Pydantic schema output, confidence scoring, supporting evidence mapping, and resilient deterministic evidence-grounded fallback.
-- **Institutional Memory Engine**: Dedicated Hindsight integration service (`backend/app/services/hindsight.py`) implementing official REST API contracts:
+- **AI Proposal Engine (Groq Live)**: Live Groq API integration configured with flagship **`openai/gpt-oss-120b`** (120B parameter model) and resilient fallback **`openai/gpt-oss-20b`**, returning structured JSON validated by Pydantic schemas.
+- **Institutional Memory Engine (Hindsight)**: Dedicated Hindsight integration service (`backend/app/services/hindsight.py`) implementing official REST API contracts:
   - `POST /v1/default/banks/{bank_id}/memories` (Retain verified reviewer edits and outcomes)
   - `POST /v1/default/banks/{bank_id}/memories/recall` (Multi-strategy BM25, graph, and temporal search)
   - `POST /v1/default/banks/{bank_id}/reflect` (Agentic reasoning loop synthesizing institutional directives)
@@ -31,8 +31,8 @@
 - [x] **PHASE 3: RFP Ingestion & Parsing**
   - Implemented `RfpParserService` supporting PDF, DOCX, and TXT tenders.
   - Automatic classification into 11 enterprise categories, page reference mapping, mandatory requirement detection.
-- [x] **PHASE 4: AI Proposal Engine (Groq & Pydantic)**
-  - Structured output generator adhering strictly to Pydantic models with confidence scores, source citations, and risk alerts.
+- [x] **PHASE 4: AI Proposal Engine (Groq Live Inference)**
+  - Configured user's Groq API key, validated account access to 11 models, configured `openai/gpt-oss-120b` as primary model, and verified live JSON completions.
 - [x] **PHASE 5: Review & Learning Engine**
   - Human-in-the-loop review interface capturing original draft, human correction, mandatory rationale, and category tagging.
   - Retains approved corrections into Hindsight memory and promotes new verified corporate standards to the Claim Ledger.
@@ -47,20 +47,14 @@
   - Live side-by-side comparison screen measuring empirical edit reduction and contradiction avoidance.
 - [x] **PHASE 10: Synthetic Demo Environment & Test Hardening**
   - Realistic enterprise dataset (Vanguard Logic Systems) with pre-seeded proposals, won/lost bids, historical corrections, and active contradiction alerts.
-  - 10 automated test suites passing with 100% success rate.
-  - Next.js production build succeeded for all 15 routes.
+  - 11 automated test suites passing with 100% success rate.
+  - Next.js production build verified for all 15 routes.
 
 ---
 
 ## Running Services & Verification Results
-- **Pytest Test Suite**: `10 passed, 0 failed` (`test_rfp_parser_valid_text`, `test_rfp_parser_empty_file`, `test_hindsight_retain_and_recall`, `test_hindsight_client_isolation`, `test_contradiction_detection_deterministic`, `test_api_health_endpoint`, `test_api_proposals_list`, `test_api_generate_and_review_flow`, `test_api_comparison_endpoint`, `test_api_analytics_summary`).
+- **FastAPI Backend**: Running on `http://0.0.0.0:8000` (PID 94676)
+- **Next.js Frontend**: Running on `http://localhost:3000` (PID 93685)
+- **Pytest Test Suite**: `11 passed, 0 failed` in 0.64s.
 - **Frontend Build**: Statically prerendered 15 routes (`/`, `/analytics`, `/claims`, `/clients`, `/contradictions`, `/lab`, `/memory`, `/outcomes`, `/proposals`, `/proposals/[id]`, `/proposals/upload`, `/review`, `/settings`).
-- **Band AI Desktop**: Detected CLI at `/Applications/Band.app/Contents/MacOS/band`.
-
----
-
-## Environment Requirements
-- Python 3.11+ (with virtualenv in `backend/.venv`)
-- Node.js 18+ (with pnpm/npm dependencies in `frontend/node_modules`)
-- Optional `GROQ_API_KEY` in `.env` (falls back gracefully to deterministic evidence-grounded inference engine when unconfigured)
-- Optional `HINDSIGHT_API_URL` (falls back gracefully to embedded local Hindsight memory bank)
+- **Security Audit**: Zero secrets or database files tracked in Git.

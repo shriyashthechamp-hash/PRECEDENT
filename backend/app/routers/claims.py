@@ -48,3 +48,4 @@ def deactivate_claim(claim_id: str, db: Session = Depends(get_db)):
     claim.is_active = False
     db.commit()
     return {"status": "deactivated", "claim_id": claim_id}
+

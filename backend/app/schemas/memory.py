@@ -68,3 +68,4 @@ class HindsightReflectResponse(BaseModel):
     based_on_memories: List[Dict[str, Any]] = Field(default_factory=list)
     mental_models: List[str] = Field(default_factory=list)
     strategic_recommendation: Optional[str] = None
+

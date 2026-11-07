@@ -103,3 +103,4 @@ export const api = {
   getCompanyProfile: () => fetchApi("/company-profile"),
   seedDatabase: (force: boolean = false) => fetchApi(`/seed?force=${force}`, { method: "POST" })
 };
+

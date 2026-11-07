@@ -60,3 +60,4 @@ class ContradictionAlert(Base):
     resolved_by = Column(String(128), nullable=True)
     resolved_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+

@@ -25,3 +25,4 @@ class ComparisonResponse(BaseModel):
     variant_off: ComparisonVariantResult
     variant_on: ComparisonVariantResult
     delta_metrics: Dict[str, Any] # e.g. edit_reduction_pct, token_difference, memory_advantage
+

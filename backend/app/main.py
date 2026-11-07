@@ -76,3 +76,4 @@ def root():
         "api_docs": "/docs",
         "health": f"{settings.API_PREFIX}/health"
     }
+

@@ -50,3 +50,4 @@ class ResolveContradictionRequest(BaseModel):
     resolution_type: str # "ENFORCE_OLD", "OVERRIDE_NEW", "DISMISS"
     reason: str
     resolved_by: str = "Domain Lead"
+

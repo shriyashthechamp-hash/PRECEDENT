@@ -73,3 +73,4 @@ async def ingest_rfp_file(
         "detected_deadline": proposal.deadline,
         "sample_questions": parsed_data["questions"][:3]
     }
+

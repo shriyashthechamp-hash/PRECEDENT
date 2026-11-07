@@ -14,6 +14,8 @@ def test_api_health_endpoint(client):
     assert data["status"] == "operational"
     assert data["product"] == "PRECEDENT"
     assert "hindsight_memory" in data
+    assert data["groq_inference"]["status"] == "configured_live"
+    assert data["groq_inference"]["primary_model"] == "openai/gpt-oss-120b"
 
 def test_api_proposals_list(client):
     res = client.get("/api/proposals")

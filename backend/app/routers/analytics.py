@@ -62,3 +62,4 @@ async def get_analytics_summary(db: Session = Depends(get_db)):
             "disclosure": "Historical metrics incorporate pre-seeded synthetic enterprise demo history (Vanguard Logic Systems) to demonstrate longitudinal learning."
         }
     }
+

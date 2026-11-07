@@ -148,3 +148,4 @@ class ContradictionEngine:
         return alert
 
 contradiction_engine = ContradictionEngine()
+

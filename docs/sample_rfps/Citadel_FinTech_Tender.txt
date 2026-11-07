@@ -18,3 +18,4 @@ MODULE 2: INFORMATION SECURITY & REGULATORY COMPLIANCE
 MODULE 3: COMMERCIAL TERMS & SLA SUPPORT
 3.1 Detail your enterprise tier support availability, named Technical Account Manager (TAM) provisions, and P1 incident escalation paths outside standard North American trading hours.
 3.2 State your data retention and post-termination extraction policies, including format availability and cryptographic verification procedures.
+

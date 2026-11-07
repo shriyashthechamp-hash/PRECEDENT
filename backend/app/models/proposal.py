@@ -94,3 +94,4 @@ class ProposalResponse(Base):
     proposal = relationship("Proposal", back_populates="responses")
     question = relationship("RfpQuestion", back_populates="responses")
     review_events = relationship("ReviewCorrectionEvent", back_populates="response", cascade="all, delete-orphan")
+

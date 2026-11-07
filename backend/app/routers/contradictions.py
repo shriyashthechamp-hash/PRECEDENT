@@ -59,3 +59,4 @@ def resolve_contradiction_alert(
         "resolution_type": payload.resolution_type,
         "resolved_at": alert.resolved_at.isoformat() if alert.resolved_at else None
     }
+

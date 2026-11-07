@@ -18,3 +18,4 @@ class BidOutcomeOut(BidOutcomeCreate):
     
     class Config:
         from_attributes = True
+

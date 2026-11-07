@@ -67,3 +67,4 @@ async def record_bid_outcome(payload: BidOutcomeCreate, db: Session = Depends(ge
     db.commit()
     db.refresh(outcome_record)
     return outcome_record
+

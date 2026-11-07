@@ -365,3 +365,4 @@ async def seed_synthetic_environment(db: Session, force: bool = False):
     db.commit()
     logger.info("Successfully seeded synthetic enterprise dataset with proposals, claims, reviews, and contradictions.")
     return {"status": "seeded_successfully"}
+

@@ -22,3 +22,4 @@ def get_company_profile(db: Session = Depends(get_db)):
 @router.post("/seed")
 async def seed_data(force: bool = False, db: Session = Depends(get_db)):
     return await seed_synthetic_environment(db, force=force)
+

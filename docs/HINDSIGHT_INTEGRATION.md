@@ -58,3 +58,4 @@ The PRECEDENT integration communicates with Hindsight via standard REST JSON end
 - **Bank Isolation**: Bank IDs follow the convention `precedent_{org_id}` to prevent cross-organization memory bleeding.
 - **Client Tagging**: Client-specific exceptions are tagged with `client:{client_id}` and `scope:client`. Global searches filter out private client scopes unless explicitly targeted for that client.
 - **Fallback & Emulation**: If an external Hindsight daemon is not reachable at the configured `HINDSIGHT_API_URL`, the PRECEDENT Hindsight service falls back gracefully to a fully schema-compliant local SQLite-backed Hindsight store that executes identical Retain/Recall/Reflect contracts without failing requests.
+

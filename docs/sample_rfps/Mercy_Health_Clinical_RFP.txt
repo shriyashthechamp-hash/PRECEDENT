@@ -21,3 +21,4 @@ SECTION 3: SECURITY, DATA GOVERNANCE & PRIVACY
 SECTION 4: SERVICE LEVEL AGREEMENTS & OPERATIONS
 4.1 Detail your standard customer support hours, response SLA matrices, and escalation protocols for hospital clinical teams. Specifically clarify coverage for critical Priority 1 (P1) system disruptions.
 4.2 Outline your planned maintenance windows and monthly availability uptime guarantees, including financial remedy credits for service interruptions.
+

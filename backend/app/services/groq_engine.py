@@ -86,23 +86,35 @@ Respond in JSON with this exact structure:
 """
         # Try live Groq API inference
         if self._client:
-            try:
-                chat_completion = self._client.chat.completions.create(
-                    messages=[
-                        {"role": "system", "content": PROPOSAL_SYSTEM_PROMPT},
-                        {"role": "user", "content": user_prompt}
-                    ],
-                    model=self.model,
-                    temperature=0.2,
-                    response_format={"type": "json_object"}
-                )
-                raw_json = chat_completion.choices[0].message.content
-                parsed = json.loads(raw_json)
-                latency = int((time.time() - start_time) * 1000)
-                parsed["latency_ms"] = latency
-                return parsed
-            except Exception as e:
-                logger.warning(f"Groq generation failed ({e}), falling back to verified deterministic engine.")
+            for active_model in [self.model, self.fallback_model]:
+                try:
+                    chat_completion = self._client.chat.completions.create(
+                        messages=[
+                            {"role": "system", "content": PROPOSAL_SYSTEM_PROMPT},
+                            {"role": "user", "content": user_prompt}
+                        ],
+                        model=active_model,
+                        temperature=0.2,
+                        response_format={"type": "json_object"}
+                    )
+                    raw_json = chat_completion.choices[0].message.content
+                    parsed = json.loads(raw_json)
+                    latency = int((time.time() - start_time) * 1000)
+                    
+                    # Ensure all schema fields exist
+                    return {
+                        "proposed_answer": str(parsed.get("proposed_answer", "")),
+                        "confidence_score": float(parsed.get("confidence_score", 0.92)),
+                        "supporting_sources": list(parsed.get("supporting_sources", [])),
+                        "recalled_precedents": list(parsed.get("recalled_precedents", [])),
+                        "missing_information": list(parsed.get("missing_information", [])),
+                        "potential_risks": list(parsed.get("potential_risks", [])),
+                        "verification_required": bool(parsed.get("verification_required", False)),
+                        "latency_ms": latency,
+                        "inference_model": active_model
+                    }
+                except Exception as e:
+                    logger.warning(f"Groq generation attempt with {active_model} failed ({e}).")
 
         # Deterministic evidence-grounded fallback reasoning engine
         latency = int((time.time() - start_time) * 1000) + 420
@@ -241,3 +253,4 @@ Respond in JSON with this exact structure:
         }
 
 groq_proposal_engine = GroqProposalEngine()
+

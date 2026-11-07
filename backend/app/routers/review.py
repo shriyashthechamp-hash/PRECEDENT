@@ -97,3 +97,4 @@ def accept_response(response_id: str, db: Session = Depends(get_db)):
     response.verification_required = False
     db.commit()
     return {"status": "accepted", "response_id": response_id}
+

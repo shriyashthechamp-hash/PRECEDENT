@@ -50,3 +50,4 @@ Unlike traditional proposal libraries that only store answers, PRECEDENT capture
 ## Security & Data Isolation
 - **Client & Organization Boundaries**: Hindsight memory banks and database records are explicitly filtered by `org_id` and `client_id`. Client-specific concessions never leak into cross-client proposals.
 - **Human Approval Gate**: AI generation alone cannot create permanent organizational claims. Only explicit human reviewer approval can promote a statement into the verified Claim Ledger and Hindsight Memory.
+
