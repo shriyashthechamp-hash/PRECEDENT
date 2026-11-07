@@ -23,6 +23,34 @@ def list_contradiction_alerts(
         
     return query.order_by(ContradictionAlert.created_at.desc()).all()
 
+@router.get("/audit-trail")
+def list_contradiction_audit_trail(
+    proposal_id: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Returns the permanent audit log of all contradiction resolutions, overrides, and dismissals.
+    """
+    from app.models.claim import ContradictionAuditLog
+    query = db.query(ContradictionAuditLog)
+    if proposal_id:
+        query = query.filter(ContradictionAuditLog.proposal_id == proposal_id)
+    logs = query.order_by(ContradictionAuditLog.timestamp.desc()).all()
+    return [
+        {
+            "id": log.id,
+            "alert_id": log.alert_id,
+            "proposal_id": log.proposal_id,
+            "action_type": log.action_type,
+            "resolved_by": log.resolved_by,
+            "justification": log.justification,
+            "previous_status": log.previous_status,
+            "new_status": log.new_status,
+            "timestamp": log.timestamp.isoformat() if log.timestamp else None
+        }
+        for log in logs
+    ]
+
 @router.post("/{alert_id}/resolve")
 def resolve_contradiction_alert(
     alert_id: str,

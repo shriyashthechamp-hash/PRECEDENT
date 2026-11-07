@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
 import enum
-from app.database import Base
+from app.database import Base, utc_now
 
 class ReviewEventStatus(str, enum.Enum):
     PENDING = "PENDING"
@@ -30,7 +30,7 @@ class ReviewCorrectionEvent(Base):
     is_retained_in_hindsight = Column(Boolean, default=False)
     hindsight_memory_id = Column(String(128), nullable=True)
     
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
     
     response = relationship("ProposalResponse", back_populates="review_events")
 

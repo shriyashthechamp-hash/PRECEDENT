@@ -138,10 +138,28 @@ class ContradictionEngine:
             "OVERRIDE_NEW": ContradictionStatus.RESOLVED_OVERRIDDEN_NEW.value,
             "DISMISS": ContradictionStatus.DISMISSED.value
         }
-        alert.status = status_map.get(resolution_type, ContradictionStatus.DISMISSED.value)
+        from datetime import datetime, timezone
+        from app.models.claim import ContradictionAuditLog
+        
+        prev_status = alert.status
+        new_status = status_map.get(resolution_type, ContradictionStatus.DISMISSED.value)
+        alert.status = new_status
         alert.resolved_by = resolved_by
-        from datetime import datetime
-        alert.resolved_at = datetime.utcnow()
+        now = datetime.now(timezone.utc)
+        alert.resolved_at = now
+        
+        # Record permanent audit log event
+        audit_log = ContradictionAuditLog(
+            alert_id=alert.id,
+            proposal_id=alert.proposal_id,
+            action_type=resolution_type,
+            resolved_by=resolved_by,
+            justification=f"Resolved via {resolution_type}: conflicting with '{alert.conflicting_claim_text[:80]}'",
+            previous_status=prev_status,
+            new_status=new_status,
+            timestamp=now
+        )
+        db.add(audit_log)
         
         db.commit()
         db.refresh(alert)

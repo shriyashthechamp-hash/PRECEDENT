@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, DateTime, Text, ForeignKey
 from datetime import datetime
 import uuid
 import enum
-from app.database import Base
+from app.database import Base, utc_now
 
 class OutcomeType(str, enum.Enum):
     WON = "WON"
@@ -35,5 +35,5 @@ class BidOutcome(Base):
     strengths_noted = Column(Text, nullable=True)
     weaknesses_noted = Column(Text, nullable=True)
     recorded_by = Column(String(128), default="Commercial Director")
-    recorded_at = Column(DateTime, default=datetime.utcnow)
+    recorded_at = Column(DateTime, default=utc_now)
 

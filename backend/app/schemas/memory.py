@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 class HindsightMemoryMetadata(BaseModel):
     org_id: str = "org_precedent_demo"
@@ -10,7 +10,7 @@ class HindsightMemoryMetadata(BaseModel):
     topic: Optional[str] = None
     approved_by: Optional[str] = None
     scope: str = "organization" # "organization", "sector", "client"
-    created_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class HindsightRetainRequest(BaseModel):
     bank_id: Optional[str] = None

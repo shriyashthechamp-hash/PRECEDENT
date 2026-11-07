@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
 import enum
-from app.database import Base
+from app.database import Base, utc_now
 
 class ProposalStatus(str, enum.Enum):
     DRAFT = "DRAFT"
@@ -44,8 +44,8 @@ class Proposal(Base):
     source_file = Column(String(255), nullable=True)
     total_questions = Column(Integer, default=0)
     reviewed_questions = Column(Integer, default=0)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     questions = relationship("RfpQuestion", back_populates="proposal", cascade="all, delete-orphan", order_by="RfpQuestion.question_index")
     responses = relationship("ProposalResponse", back_populates="proposal", cascade="all, delete-orphan")
@@ -88,8 +88,8 @@ class ProposalResponse(Base):
     version = Column(Integer, default=1)
     generation_mode = Column(String(32), default="MEMORY_ON") # MEMORY_ON or MEMORY_OFF
     generation_latency_ms = Column(Integer, default=0)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
     
     proposal = relationship("Proposal", back_populates="responses")
     question = relationship("RfpQuestion", back_populates="responses")

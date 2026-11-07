@@ -16,7 +16,8 @@ from app.routers import (
     outcomes,
     comparison,
     analytics,
-    clients
+    clients,
+    demo
 )
 
 logging.basicConfig(level=getattr(logging, settings.LOG_LEVEL))
@@ -66,6 +67,7 @@ app.include_router(outcomes.router, prefix=settings.API_PREFIX)
 app.include_router(comparison.router, prefix=settings.API_PREFIX)
 app.include_router(analytics.router, prefix=settings.API_PREFIX)
 app.include_router(clients.router, prefix=settings.API_PREFIX)
+app.include_router(demo.router, prefix=settings.API_PREFIX)
 
 @app.get("/")
 def root():

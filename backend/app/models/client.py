@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, DateTime, JSON, Text
 from datetime import datetime
 import uuid
-from app.database import Base
+from app.database import Base, utc_now
 
 class Client(Base):
     __tablename__ = "clients"
@@ -11,7 +11,7 @@ class Client(Base):
     industry = Column(String(128), nullable=False, index=True)
     description = Column(Text, nullable=True)
     preferences = Column(JSON, default=dict)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
 
 class Sector(Base):
     __tablename__ = "sectors"
@@ -20,7 +20,7 @@ class Sector(Base):
     name = Column(String(128), nullable=False, unique=True, index=True)
     compliance_standards = Column(JSON, default=list) # e.g. ["HIPAA", "SOC2 Type II", "HITRUST"]
     common_requirements = Column(JSON, default=list)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
 
 class CompanyProfile(Base):
     __tablename__ = "company_profile"
@@ -30,5 +30,5 @@ class CompanyProfile(Base):
     tagline = Column(String(255), default="Enterprise Workflow Automation & Document Intelligence")
     description = Column(Text, nullable=True)
     facts = Column(JSON, default=dict) # approved corporate facts
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 

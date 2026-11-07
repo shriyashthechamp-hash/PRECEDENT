@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 
@@ -16,6 +16,7 @@ class ClaimItemCreate(ClaimItemBase):
     approved_by: str = "Principal Architect"
 
 class ClaimItemOut(ClaimItemBase):
+    model_config = ConfigDict(from_attributes=True)
     id: str
     approval_status: str
     approved_by: str
@@ -23,11 +24,9 @@ class ClaimItemOut(ClaimItemBase):
     is_active: bool
     created_at: datetime
     updated_at: datetime
-    
-    class Config:
-        from_attributes = True
 
 class ContradictionAlertOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: str
     proposal_id: str
     question_id: Optional[str] = None
@@ -42,12 +41,8 @@ class ContradictionAlertOut(BaseModel):
     resolved_by: Optional[str] = None
     resolved_at: Optional[datetime] = None
     created_at: datetime
-    
-    class Config:
-        from_attributes = True
 
 class ResolveContradictionRequest(BaseModel):
     resolution_type: str # "ENFORCE_OLD", "OVERRIDE_NEW", "DISMISS"
-    reason: str
-    resolved_by: str = "Domain Lead"
-
+    reason: Optional[str] = None
+    resolved_by: str = "Lead Reviewer"

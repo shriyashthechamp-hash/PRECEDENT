@@ -224,3 +224,55 @@ async def generate_response_for_question(payload: GenerateAnswerRequest, db: Ses
         ]
     }
 
+@router.post("/{proposal_id}/submit")
+def submit_proposal(proposal_id: str, db: Session = Depends(get_db)):
+    """
+    Submits a proposal after verifying no unresolved HIGH severity contradictions exist.
+    Hard gate: Prevents proposal submission while unresolved high-severity conflicts remain.
+    """
+    prop = db.query(Proposal).filter(Proposal.id == proposal_id).first()
+    if not prop:
+        raise HTTPException(status_code=404, detail="Proposal not found.")
+
+    from app.models.claim import ContradictionAlert, ContradictionStatus, ContradictionSeverity
+    
+    # Check for open HIGH severity contradictions
+    open_high_conflicts = db.query(ContradictionAlert).filter(
+        ContradictionAlert.proposal_id == proposal_id,
+        ContradictionAlert.status == ContradictionStatus.OPEN.value,
+        ContradictionAlert.severity == ContradictionSeverity.HIGH.value
+    ).all()
+
+    if open_high_conflicts:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "SUBMISSION_BLOCKED_UNRESOLVED_CONTRADICTIONS",
+                "message": f"Proposal submission blocked: {len(open_high_conflicts)} unresolved HIGH severity contradiction(s) remain.",
+                "unresolved_conflicts": [
+                    {
+                        "alert_id": c.id,
+                        "conflict_explanation": c.conflict_explanation,
+                        "conflicting_claim_text": c.conflicting_claim_text,
+                        "new_claim_text": c.new_claim_text,
+                        "severity": c.severity
+                    }
+                    for c in open_high_conflicts
+                ]
+            }
+        )
+
+    from datetime import datetime, timezone
+    prop.status = ProposalStatus.SUBMITTED.value
+    prop.updated_at = datetime.now(timezone.utc)
+    db.commit()
+    db.refresh(prop)
+
+    return {
+        "status": "SUBMITTED",
+        "proposal_id": prop.id,
+        "message": "Proposal successfully submitted. All institutional commitments verified with zero open high contradictions.",
+        "submitted_at": prop.updated_at.isoformat()
+    }
+
+

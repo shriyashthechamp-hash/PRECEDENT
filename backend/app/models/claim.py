@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Boolean, DateTime, Text, Float, ForeignKe
 from datetime import datetime
 import uuid
 import enum
-from app.database import Base
+from app.database import Base, utc_now
 
 class ContradictionSeverity(str, enum.Enum):
     HIGH = "HIGH"
@@ -26,7 +26,7 @@ class ClaimLedgerItem(Base):
     scope = Column(String(32), default="global") # global, sector, client
     scope_target = Column(String(128), nullable=True) # sector_id or client_id
     
-    valid_from = Column(DateTime, default=datetime.utcnow)
+    valid_from = Column(DateTime, default=utc_now)
     valid_until = Column(DateTime, nullable=True) # null = perpetual until superseded
     
     source_proposal_id = Column(String(64), nullable=True)
@@ -37,8 +37,8 @@ class ClaimLedgerItem(Base):
     version = Column(String(16), default="1.0")
     is_active = Column(Boolean, default=True)
     
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 
 class ContradictionAlert(Base):
     __tablename__ = "contradiction_alerts"
@@ -59,5 +59,19 @@ class ContradictionAlert(Base):
     
     resolved_by = Column(String(128), nullable=True)
     resolved_at = Column(DateTime, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
+
+class ContradictionAuditLog(Base):
+    __tablename__ = "contradiction_audit_logs"
+    
+    id = Column(String(64), primary_key=True, default=lambda: f"cal_{uuid.uuid4().hex[:12]}")
+    alert_id = Column(String(64), ForeignKey("contradiction_alerts.id", ondelete="CASCADE"), nullable=False, index=True)
+    proposal_id = Column(String(64), nullable=False, index=True)
+    action_type = Column(String(32), nullable=False) # RESOLVED_ENFORCED_OLD, RESOLVED_OVERRIDDEN_NEW, DISMISSED
+    resolved_by = Column(String(128), nullable=False)
+    justification = Column(Text, nullable=True)
+    previous_status = Column(String(32), default=ContradictionStatus.OPEN.value)
+    new_status = Column(String(32), nullable=False)
+    timestamp = Column(DateTime, default=utc_now)
+
 

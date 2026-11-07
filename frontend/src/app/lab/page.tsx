@@ -156,48 +156,65 @@ export default function MemoryAbLabPage() {
           <div className="p-5 rounded-lg bg-surface border border-border space-y-4 animate-fadeIn">
             <div className="flex items-center justify-between pb-3 border-b border-border">
               <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
-                EMPIRICAL DELTA MEASUREMENTS
+                EMPIRICAL MEASURED DELTA (ZERO FABRICATED METRICS)
               </span>
               <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                100% Live Measured
+                Live Measured from Inference Output
               </span>
+            </div>
+
+            {/* Empirical Finding Banner */}
+            <div className={`p-3.5 rounded-lg border text-xs flex items-center gap-2.5 ${
+              comparisonResult.delta_metrics?.measured_impact === "CONTRADICTION_PREVENTED"
+                ? "bg-emerald-950/30 border-emerald-500/40 text-emerald-200"
+                : comparisonResult.delta_metrics?.measured_impact === "CONSISTENCY_IMPROVED"
+                ? "bg-purple-950/30 border-purple-500/40 text-purple-200"
+                : "bg-surface-elevated border-border text-neutral-300"
+            }`}>
+              <ShieldCheck className="w-4 h-4 shrink-0" />
+              <div>
+                <strong className="block font-mono text-[11px] uppercase tracking-wide">
+                  Empirical Finding: {comparisonResult.delta_metrics?.measured_impact || "ANALYSIS COMPLETE"}
+                </strong>
+                <span>{comparisonResult.delta_metrics?.empirical_finding}</span>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="p-3 rounded bg-surface-elevated border border-border">
-                <div className="text-[10px] text-neutral-400 uppercase font-mono">Confidence Lift</div>
+                <div className="text-[10px] text-neutral-400 uppercase font-mono">Statistical Confidence Lift</div>
                 <div className="text-xl font-bold text-emerald-400 mt-1">
-                  +{Math.round(comparisonResult.delta_metrics.confidence_lift * 100)}%
+                  +{Math.round((comparisonResult.variant_on.confidence_score - comparisonResult.variant_off.confidence_score) * 100)}%
                 </div>
-                <div className="text-[10px] text-neutral-500 mt-0.5">Grounding in verified facts</div>
+                <div className="text-[10px] text-neutral-500 mt-0.5">Statistical token likelihood (not certainty)</div>
               </div>
 
               <div className="p-3 rounded bg-surface-elevated border border-border">
-                <div className="text-[10px] text-neutral-400 uppercase font-mono">Reviewer Edit Reduction</div>
+                <div className="text-[10px] text-neutral-400 uppercase font-mono">Reviewer Chars Saved</div>
                 <div className="text-xl font-bold text-blue-400 mt-1">
-                  {comparisonResult.delta_metrics.estimated_edit_reduction_pct}%
+                  {comparisonResult.delta_metrics?.reviewer_characters_saved ?? 0} chars
                 </div>
-                <div className="text-[10px] text-neutral-500 mt-0.5">Based on precedent reuse</div>
+                <div className="text-[10px] text-neutral-500 mt-0.5">Direct text diff vs unassisted draft</div>
               </div>
 
               <div className="p-3 rounded bg-surface-elevated border border-border">
                 <div className="text-[10px] text-neutral-400 uppercase font-mono">Contradictions Avoided</div>
                 <div className="text-xl font-bold text-conflict mt-1">
-                  {comparisonResult.delta_metrics.contradiction_avoidance > 0 ? (
-                    <span className="text-emerald-400">1 Blocked</span>
+                  {comparisonResult.delta_metrics?.contradiction_delta > 0 ? (
+                    <span className="text-emerald-400">+{comparisonResult.delta_metrics.contradiction_delta} Blocked</span>
                   ) : (
-                    "0 Clashes"
+                    <span className="text-neutral-400">0 Collisions</span>
                   )}
                 </div>
-                <div className="text-[10px] text-neutral-500 mt-0.5">Pre-submission defense</div>
+                <div className="text-[10px] text-neutral-500 mt-0.5">Pre-submission claim defense</div>
               </div>
 
               <div className="p-3 rounded bg-surface-elevated border border-border">
-                <div className="text-[10px] text-neutral-400 uppercase font-mono">Hindsight Memories Used</div>
+                <div className="text-[10px] text-neutral-400 uppercase font-mono">Recall Latency</div>
                 <div className="text-xl font-bold text-purple-400 mt-1">
-                  {comparisonResult.delta_metrics.memory_precedents_leveraged} Cited
+                  {comparisonResult.delta_metrics?.recall_latency_ms ?? 0}ms
                 </div>
-                <div className="text-[10px] text-neutral-500 mt-0.5">Institutional bank recall</div>
+                <div className="text-[10px] text-neutral-500 mt-0.5">Hindsight parallel retrieval time</div>
               </div>
             </div>
           </div>

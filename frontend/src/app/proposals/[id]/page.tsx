@@ -25,9 +25,26 @@ export default function ProposalWorkspacePage({ params }: { params: Promise<{ id
   const [proposal, setProposal] = useState<any>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<any>(null);
   const [generating, setGenerating] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [generationMode, setGenerationMode] = useState<"MEMORY_ON" | "MEMORY_OFF">("MEMORY_ON");
   const [loading, setLoading] = useState(true);
   const [alertNotice, setAlertNotice] = useState<any>(null);
+  const [submitError, setSubmitError] = useState<any>(null);
+
+  const handleSubmitProposal = async () => {
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await api.submitProposal(proposalId);
+      const updated = await api.getProposalDetail(proposalId);
+      setProposal(updated);
+      alert("Proposal successfully submitted! All claims and commitments verified.");
+    } catch (e: any) {
+      setSubmitError(e.message || "Submission blocked: unresolved contradictions remain.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     async function load() {
@@ -98,13 +115,34 @@ export default function ProposalWorkspacePage({ params }: { params: Promise<{ id
         title={proposal.title}
         subtitle={`${proposal.rfp_reference || proposal.id} · ${proposal.client?.name || "Enterprise Client"} (${proposal.sector?.name || "Regulated"})`}
         action={
-          <Link
-            href="/proposals"
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 hover:text-white bg-surface-elevated border border-border rounded transition"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>All Proposals</span>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/proposals"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 hover:text-white bg-surface-elevated border border-border rounded transition"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>All Proposals</span>
+            </Link>
+            {proposal.status !== "SUBMITTED" ? (
+              <button
+                onClick={handleSubmitProposal}
+                disabled={submitting}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 rounded transition shadow-sm"
+              >
+                {submitting ? (
+                  <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                )}
+                <span>Submit Proposal</span>
+              </button>
+            ) : (
+              <span className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-semibold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 rounded">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>SUBMITTED</span>
+              </span>
+            )}
+          </div>
         }
       />
 
@@ -197,6 +235,32 @@ export default function ProposalWorkspacePage({ params }: { params: Promise<{ id
                 )}
               </div>
 
+              {/* Submission Blocked Alert Banner */}
+              {submitError && (
+                <div className="p-4 rounded-lg bg-conflict-subtle border border-conflict text-xs text-conflict flex items-start justify-between gap-3 animate-fadeIn">
+                  <div className="flex items-start gap-2.5">
+                    <AlertTriangle className="w-5 h-5 text-conflict shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="block font-bold text-sm text-conflict">
+                        Submission Blocked: Contradiction Gate Active
+                      </strong>
+                      <p className="text-neutral-200 mt-1">
+                        {submitError}
+                      </p>
+                      <p className="text-[11px] text-neutral-400 mt-1">
+                        PRECEDENT policy strictly prohibits submitting proposals with open HIGH-severity claim contradictions.
+                      </p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/contradictions"
+                    className="px-3 py-1.5 text-xs font-semibold text-white bg-conflict hover:bg-red-600 rounded transition shrink-0"
+                  >
+                    Resolve in Contradiction Center
+                  </Link>
+                </div>
+              )}
+
               {/* Contradiction / Conflict Notice Banner */}
               {alertNotice && (
                 <div className="p-4 rounded-lg bg-conflict-subtle border border-conflict/40 text-xs text-conflict flex items-center justify-between">
@@ -287,10 +351,13 @@ export default function ProposalWorkspacePage({ params }: { params: Promise<{ id
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-1 text-xs font-mono">
-                        <span className="text-neutral-400">Confidence:</span>
+                      <div className="flex items-center gap-1.5 text-xs font-mono" title="Model generation probability estimation. Not factual certainty; human review is required.">
+                        <span className="text-neutral-400">Model Conf:</span>
                         <span className="text-emerald-400 font-bold">
                           {Math.round(latestResponse.confidence_score * 100)}%
+                        </span>
+                        <span className="text-[10px] text-neutral-500 font-normal border-b border-dotted border-neutral-600 cursor-help">
+                          (statistical likelihood)
                         </span>
                       </div>
                       <Link

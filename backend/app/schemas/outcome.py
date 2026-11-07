@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List
 from datetime import datetime
 
@@ -13,9 +13,6 @@ class BidOutcomeCreate(BaseModel):
     recorded_by: str = "Commercial Director"
 
 class BidOutcomeOut(BidOutcomeCreate):
+    model_config = ConfigDict(from_attributes=True)
     id: str
     recorded_at: datetime
-    
-    class Config:
-        from_attributes = True
-

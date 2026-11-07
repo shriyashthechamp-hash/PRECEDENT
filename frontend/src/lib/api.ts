@@ -98,6 +98,9 @@ export const api = {
     }),
 
   getAnalyticsSummary: () => fetchApi("/analytics/summary"),
+  submitProposal: (proposalId: string) => fetchApi(`/proposals/${proposalId}/submit`, { method: "POST" }),
+  getContradictionAuditTrail: (proposalId?: string) =>
+    fetchApi(`/contradictions/audit-trail${proposalId ? `?proposal_id=${proposalId}` : ""}`),
   getClients: () => fetchApi("/clients"),
   getSectors: () => fetchApi("/sectors"),
   getCompanyProfile: () => fetchApi("/company-profile"),

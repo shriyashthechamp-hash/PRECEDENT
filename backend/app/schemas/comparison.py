@@ -14,6 +14,10 @@ class ComparisonVariantResult(BaseModel):
     missing_information: List[str]
     potential_risks: List[str]
     contradictions_detected: int
+    unsupported_claims_count: int = 0
+    historical_consistency_score: float = 1.0
+    estimated_reviewer_edits_chars: int = 0
+    recall_latency_ms: int = 0
     latency_ms: int
     char_count: int
     word_count: int
@@ -24,5 +28,4 @@ class ComparisonResponse(BaseModel):
     category: str
     variant_off: ComparisonVariantResult
     variant_on: ComparisonVariantResult
-    delta_metrics: Dict[str, Any] # e.g. edit_reduction_pct, token_difference, memory_advantage
-
+    delta_metrics: Dict[str, Any]

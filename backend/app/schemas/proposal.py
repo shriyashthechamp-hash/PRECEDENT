@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 
@@ -15,12 +15,10 @@ class QuestionCreate(QuestionBase):
     question_index: int
 
 class QuestionOut(QuestionBase):
+    model_config = ConfigDict(from_attributes=True)
     id: str
     proposal_id: str
     question_index: int
-    
-    class Config:
-        from_attributes = True
 
 class ProposalResponseBase(BaseModel):
     proposed_answer: str
@@ -33,6 +31,7 @@ class ProposalResponseBase(BaseModel):
     status: str = "DRAFT"
 
 class ProposalResponseOut(ProposalResponseBase):
+    model_config = ConfigDict(from_attributes=True)
     id: str
     question_id: str
     proposal_id: str
@@ -41,9 +40,6 @@ class ProposalResponseOut(ProposalResponseBase):
     generation_latency_ms: int
     created_at: datetime
     updated_at: datetime
-    
-    class Config:
-        from_attributes = True
 
 class ProposalCreate(BaseModel):
     title: str
@@ -53,6 +49,7 @@ class ProposalCreate(BaseModel):
     deadline: Optional[str] = None
 
 class ProposalOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: str
     title: str
     rfp_reference: Optional[str] = None
@@ -65,9 +62,6 @@ class ProposalOut(BaseModel):
     reviewed_questions: int
     created_at: datetime
     updated_at: datetime
-    
-    class Config:
-        from_attributes = True
 
 class GenerateAnswerRequest(BaseModel):
     proposal_id: str
@@ -87,6 +81,7 @@ class ReviewCorrectionCreate(BaseModel):
     retain_in_hindsight: bool = True
 
 class ReviewCorrectionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: str
     response_id: str
     question_id: str
@@ -100,7 +95,3 @@ class ReviewCorrectionOut(BaseModel):
     is_retained_in_hindsight: bool
     hindsight_memory_id: Optional[str] = None
     created_at: datetime
-    
-    class Config:
-        from_attributes = True
-

@@ -84,7 +84,7 @@ export default function OverviewPage() {
               <TrendingUp className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="text-2xl font-bold text-white tracking-tight">
-              {analytics?.reviewer_edit_reduction_rate || "78.4%"}
+              {analytics?.reviewer_edit_reduction_rate ?? (loading ? "..." : "Insufficient Data")}
             </div>
             <p className="text-[11px] text-neutral-400 mt-1">
               Fewer corrections needed per proposal over time
@@ -98,12 +98,18 @@ export default function OverviewPage() {
             </div>
             <div className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
               <span>{contradictions.length}</span>
-              <span className="text-xs font-normal text-conflict px-2 py-0.5 rounded bg-conflict/10 border border-conflict/30">
-                Active Conflict
-              </span>
+              {contradictions.length > 0 ? (
+                <span className="text-xs font-normal text-conflict px-2 py-0.5 rounded bg-conflict/10 border border-conflict/30">
+                  Active Conflict
+                </span>
+              ) : (
+                <span className="text-xs font-normal text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30">
+                  Protected
+                </span>
+              )}
             </div>
             <p className="text-[11px] text-neutral-400 mt-1">
-              Prevented submitting conflicting commitments
+              {contradictions.length > 0 ? "Blocks submission until resolved" : "Zero active claim collisions"}
             </p>
           </div>
 
@@ -113,7 +119,7 @@ export default function OverviewPage() {
               <BrainCircuit className="w-4 h-4 text-purple-400" />
             </div>
             <div className="text-2xl font-bold text-white tracking-tight">
-              {analytics?.retained_institutional_memories || memories.length || "12"}
+              {analytics?.retained_institutional_memories !== undefined ? analytics.retained_institutional_memories : (loading ? "..." : memories.length)}
             </div>
             <p className="text-[11px] text-neutral-400 mt-1">
               Verified reviewer corrections retained & scoped
@@ -126,10 +132,10 @@ export default function OverviewPage() {
               <CheckCircle2 className="w-4 h-4 text-blue-400" />
             </div>
             <div className="text-2xl font-bold text-white tracking-tight">
-              {analytics?.historical_win_rate || "66.7%"}
+              {analytics?.historical_win_rate ?? (loading ? "..." : "No recorded outcomes")}
             </div>
             <p className="text-[11px] text-neutral-400 mt-1">
-              $1.37M total ARR historical pipeline
+              {analytics?.won_bids_count !== undefined ? `${analytics.won_bids_count} won, ${analytics.lost_bids_count} lost recorded bids` : "Based on recorded bid outcomes"}
             </p>
           </div>
         </div>
@@ -179,51 +185,62 @@ export default function OverviewPage() {
             </div>
 
             <div className="space-y-3">
-              {proposals.map((prop) => (
-                <div
-                  key={prop.id}
-                  className="p-4 rounded-lg bg-surface border border-border hover:border-neutral-700 transition space-y-3"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-elevated text-neutral-400 border border-border">
-                          {prop.rfp_reference || prop.id}
-                        </span>
-                        <span
-                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                            prop.status === "SUBMITTED"
-                              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
-                              : prop.status === "IN_REVIEW"
-                              ? "bg-amber-500/10 text-amber-400 border border-amber-500/30"
-                              : "bg-blue-500/10 text-blue-400 border border-blue-500/30"
-                          }`}
-                        >
-                          {prop.status}
-                        </span>
-                      </div>
-                      <h3 className="text-sm font-semibold text-white mt-1.5">{prop.title}</h3>
-                    </div>
-                    <Link
-                      href={`/proposals/${prop.id}`}
-                      className="px-2.5 py-1 text-xs text-neutral-300 hover:text-white bg-surface-elevated hover:bg-surface-hover border border-border rounded transition"
-                    >
-                      Open Workspace
-                    </Link>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs text-neutral-400 pt-2 border-t border-border/60">
-                    <div className="flex items-center gap-4">
-                      <span>Questions: {prop.total_questions}</span>
-                      <span>Deadline: {prop.deadline || "Open"}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-blue-400">
-                      <ShieldCheck className="w-3.5 h-3.5" />
-                      <span>Institutional Memory Active</span>
-                    </div>
-                  </div>
+              {proposals.length === 0 ? (
+                <div className="p-8 text-center rounded-lg bg-surface border border-border space-y-3">
+                  <FileText className="w-8 h-8 text-neutral-500 mx-auto" />
+                  <p className="text-sm font-medium text-neutral-300">No active proposals in workspace</p>
+                  <p className="text-xs text-neutral-500">Upload your first enterprise RFP document to begin institutional reasoning.</p>
+                  <Link href="/proposals/upload" className="inline-block px-4 py-2 text-xs font-medium text-white bg-blue-600 hover:bg-blue-500 rounded transition">
+                    Upload RFP Document
+                  </Link>
                 </div>
-              ))}
+              ) : (
+                proposals.map((prop) => (
+                  <div
+                    key={prop.id}
+                    className="p-4 rounded-lg bg-surface border border-border hover:border-neutral-700 transition space-y-3"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-surface-elevated text-neutral-400 border border-border">
+                            {prop.rfp_reference || prop.id}
+                          </span>
+                          <span
+                            className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                              prop.status === "SUBMITTED"
+                                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"
+                                : prop.status === "IN_REVIEW"
+                                ? "bg-amber-500/10 text-amber-400 border border-amber-500/30"
+                                : "bg-blue-500/10 text-blue-400 border border-blue-500/30"
+                            }`}
+                          >
+                            {prop.status}
+                          </span>
+                        </div>
+                        <h3 className="text-sm font-semibold text-white mt-1.5">{prop.title}</h3>
+                      </div>
+                      <Link
+                        href={`/proposals/${prop.id}`}
+                        className="px-2.5 py-1 text-xs text-neutral-300 hover:text-white bg-surface-elevated hover:bg-surface-hover border border-border rounded transition"
+                      >
+                        Open Workspace
+                      </Link>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-neutral-400 pt-2 border-t border-border/60">
+                      <div className="flex items-center gap-4">
+                        <span>Questions: {prop.total_questions}</span>
+                        <span>Deadline: {prop.deadline || "Open"}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-blue-400">
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <span>Institutional Memory Active</span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
