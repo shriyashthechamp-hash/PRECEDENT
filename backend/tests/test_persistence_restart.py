@@ -18,7 +18,9 @@ def test_hindsight_persistence_survives_restart():
     
     # 1. Instance 1 retains memory
     service_1 = HindsightService()
-    unique_claim = f"Tier-4 disaster recovery RTO is guaranteed under 45 minutes for all sovereign cloud deployments {uuid.uuid4().hex[:6]}"
+    unique_token = uuid.uuid4().hex[:8]
+    unique_tag = f"rto_test_{unique_token}"
+    unique_claim = f"Tier-4 disaster recovery RTO is guaranteed under 45 minutes for all sovereign cloud deployments {unique_token}"
     
     async def run_retain():
         return await service_1.retain(HindsightRetainRequest(
@@ -30,7 +32,7 @@ def test_hindsight_persistence_survives_restart():
                 "rationale": "Sovereign cloud compliance requirement",
                 "scope": "global"
             },
-            tags=["disaster_recovery", "rto", "sovereign"]
+            tags=[unique_tag, "disaster_recovery", "rto", "sovereign"]
         ))
     
     retain_res = asyncio.run(run_retain())
@@ -45,9 +47,9 @@ def test_hindsight_persistence_survives_restart():
     
     async def run_recall():
         return await service_2.recall(HindsightRecallRequest(
-            query="disaster recovery RTO sovereign cloud deployment guarantee",
+            query=f"disaster recovery RTO sovereign cloud deployment guarantee {unique_token}",
             limit=5,
-            tags=["disaster_recovery"]
+            tags=[unique_tag]
         ))
         
     recall_res = asyncio.run(run_recall())
@@ -60,3 +62,4 @@ def test_hindsight_persistence_survives_restart():
     assert matched.metadata.get("approved_by") == "Chief Information Security Officer"
     assert matched.metadata.get("reviewer_rationale") == "Sovereign cloud compliance requirement"
     assert matched.occurred_at is not None
+

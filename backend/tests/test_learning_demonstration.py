@@ -43,3 +43,4 @@ def test_institutional_learning_cycle_api(client):
     assert step_hi["respects_approved_precedent"] is True
     assert step_hi["avoids_seeded_error"] is True
     assert "24/5" in step_hi["proposal_b_answer"]
+
