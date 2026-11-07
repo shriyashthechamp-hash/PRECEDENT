@@ -1,0 +1,23 @@
+================================================================================
+REQUEST FOR PROPOSAL (RFP): CLINICAL WORKFLOW & DOCUMENT INTELLIGENCE
+ISSUING ENTITY: Mercy Health Consortium
+DOCUMENT REFERENCE: MHC-RFP-2026-089
+SUBMISSION DEADLINE: 2026-11-30
+================================================================================
+
+SECTION 1: CORPORATE & VENDOR PROFILE
+1.1 Describe your organization's corporate structure, years in commercial operation, and executive leadership credentials in healthcare technology.
+1.2 Provide verifiable references for at least two enterprise hospital networks currently utilizing your platform in a production clinical environment.
+
+SECTION 2: CLINICAL WORKFLOW & TECHNICAL CAPABILITIES
+2.1 Detail how your document reasoning engine processes unstructured clinical notes, pathology reports, and HL7/FHIR feeds with verifiable audit provenance.
+2.2 Describe your multi-region high availability architecture and specify your recovery time objective (RTO) and recovery point objective (RPO) for Tier-1 clinical processing.
+
+SECTION 3: SECURITY, DATA GOVERNANCE & PRIVACY
+3.1 Provide your current SOC2 Type II audit attestation and HIPAA Security Rule compliance documentation.
+3.2 State your customer data retention policy post-contract termination and provide the verified timeline for certified destruction of all Protected Health Information (PHI).
+3.3 Detail your data encryption standards for sensitive patient data both at rest and in transit across public and private networks.
+
+SECTION 4: SERVICE LEVEL AGREEMENTS & OPERATIONS
+4.1 Detail your standard customer support hours, response SLA matrices, and escalation protocols for hospital clinical teams. Specifically clarify coverage for critical Priority 1 (P1) system disruptions.
+4.2 Outline your planned maintenance windows and monthly availability uptime guarantees, including financial remedy credits for service interruptions.

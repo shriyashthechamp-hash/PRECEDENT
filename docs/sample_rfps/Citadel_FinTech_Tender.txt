@@ -1,0 +1,20 @@
+================================================================================
+INVITATION TO TENDER: ENTERPRISE FINANCIAL INGESTION & COMPLIANCE PIPELINE
+ISSUING ENTITY: Citadel Global Financial Partners
+DOCUMENT REFERENCE: CGF-TDR-2026-442
+SUBMISSION DEADLINE: 2026-12-15
+================================================================================
+
+MODULE 1: ARCHITECTURE & SYSTEM ISOLATION
+1.1 Detail your multi-tenant data isolation architecture and describe options for dedicated virtual private cloud (VPC) transit gateway peering.
+1.2 What are your contractual uptime availability commitments (SLA) and monthly credit schedules for unscheduled trading interruptions?
+1.3 State your business continuity specifications, specifically target Recovery Time Objective (RTO) and Recovery Point Objective (RPO) under simulated disaster recovery conditions.
+
+MODULE 2: INFORMATION SECURITY & REGULATORY COMPLIANCE
+2.1 Provide your independent third-party penetration testing summary from the preceding 12 months.
+2.2 Detail your encryption algorithms, key rotation cycles (KMS), and support for hardware security module (HSM) customer-managed keys.
+2.3 Outline your employee background check protocols, role-based access control (RBAC) governance, and multi-factor authentication (MFA) enforcement.
+
+MODULE 3: COMMERCIAL TERMS & SLA SUPPORT
+3.1 Detail your enterprise tier support availability, named Technical Account Manager (TAM) provisions, and P1 incident escalation paths outside standard North American trading hours.
+3.2 State your data retention and post-termination extraction policies, including format availability and cryptographic verification procedures.
