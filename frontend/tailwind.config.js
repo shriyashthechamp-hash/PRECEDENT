@@ -8,12 +8,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#090B0E",
-        surface: "#11151C",
+        background: "#08090D",
+        "bg-secondary": "#0D0F15",
+        surface: "#111319",
         "surface-elevated": "#181D26",
         "surface-hover": "#202632",
-        border: "#232A36",
-        "border-focus": "#3B82F6",
+        border: "rgba(255, 255, 255, 0.09)",
+        "border-focus": "#7965FF",
+        "text-primary": "#F5F5F7",
+        "text-secondary": "#9295A1",
+        aurora: {
+          violet: "#7965FF",
+          "violet-glow": "rgba(121, 101, 255, 0.15)",
+          teal: "#00C9B7",
+          "teal-glow": "rgba(0, 201, 183, 0.15)",
+        },
         brand: {
           50: "#eff6ff",
           100: "#dbeafe",
@@ -27,9 +36,9 @@ module.exports = {
           border: "#7F1D1D"
         },
         memory: {
-          DEFAULT: "#8B5CF6",
-          subtle: "rgba(139, 92, 246, 0.12)",
-          border: "#4C1D95"
+          DEFAULT: "#7965FF",
+          subtle: "rgba(121, 101, 255, 0.12)",
+          border: "rgba(121, 101, 255, 0.3)"
         }
       },
       fontFamily: {

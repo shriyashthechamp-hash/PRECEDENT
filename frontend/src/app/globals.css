@@ -3,33 +3,81 @@
 @tailwind utilities;
 
 :root {
-  --background: #090B0E;
-  --foreground: #EDEDED;
+  --background: #08090D;
+  --bg-secondary: #0D0F15;
+  --surface: #111319;
+  --foreground: #F5F5F7;
+  --foreground-muted: #9295A1;
+  --border-muted: rgba(255, 255, 255, 0.09);
+  --electric-violet: #7965FF;
+  --muted-teal: #00C9B7;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbars for high-density enterprise feel */
+/* Subtle dot grid pattern */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Fine hairline grid pattern */
+.bg-hairline-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Subtle Aurora Gradient Backdrops */
+.aurora-glow-violet {
+  background: radial-gradient(circle at 50% 50%, rgba(121, 101, 255, 0.12) 0%, rgba(121, 101, 255, 0.02) 50%, transparent 80%);
+}
+
+.aurora-glow-teal {
+  background: radial-gradient(circle at 50% 50%, rgba(0, 201, 183, 0.10) 0%, rgba(0, 201, 183, 0.02) 50%, transparent 80%);
+}
+
+.aurora-glow-combined {
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(121, 101, 255, 0.12) 0%, rgba(0, 201, 183, 0.05) 40%, transparent 75%);
+}
+
+/* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0D1017;
+  background: #08090D;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #232A36;
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3B82F6;
+  background: #7965FF;
 }
 
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

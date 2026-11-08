@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Sidebar } from "@/components/Sidebar";
+import { AppShell } from "@/components/AppShell";
 
 export const metadata: Metadata = {
   title: "PRECEDENT — Institutional Intelligence Platform",
-  description: "AI-native institutional proposal & RFP intelligence with persistent Hindsight memory and contradiction protection.",
+  description: "Your organization's memory. Your next unfair advantage. Every bid builds a better next bid.",
 };
 
 export default function RootLayout({
@@ -13,14 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="bg-background text-foreground flex h-screen overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 flex flex-col h-screen overflow-y-auto min-w-0">
-          {children}
-        </main>
+    <html lang="en" className="dark scroll-smooth">
+      <body className="bg-background text-foreground antialiased selection:bg-purple-500/20 selection:text-white">
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );
 }
-

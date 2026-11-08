@@ -21,7 +21,7 @@ import { useState, useEffect } from "react";
 import { api } from "@/lib/api";
 
 const NAV_ITEMS = [
-  { label: "Overview", href: "/", icon: LayoutDashboard },
+  { label: "Overview", href: "/app", icon: LayoutDashboard },
   { label: "Proposals & RFPs", href: "/proposals", icon: FileText },
   { label: "Review Center", href: "/review", icon: CheckCircle2 },
   { label: "Contradiction Center", href: "/contradictions", icon: AlertTriangle, hasAlert: true },
@@ -59,7 +59,7 @@ export function Sidebar() {
     <aside className="w-64 bg-surface border-r border-border flex flex-col h-screen sticky top-0 shrink-0 select-none">
       {/* Brand Header */}
       <div className="p-5 border-b border-border flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link href="/app" className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-white shadow-sm shadow-blue-500/20">
             P
           </div>
@@ -112,14 +112,21 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Quick Ingest Button */}
-      <div className="p-3 border-t border-border">
+      {/* Quick Ingest Button & Public Site Link */}
+      <div className="p-3 border-t border-border space-y-2">
         <Link
           href="/proposals/upload"
           className="flex items-center justify-center gap-2 w-full py-2 px-3 text-xs font-medium text-white bg-surface-elevated hover:bg-surface-hover border border-border rounded-md transition"
         >
           <UploadCloud className="w-3.5 h-3.5 text-blue-400" />
           <span>Ingest New RFP</span>
+        </Link>
+        <Link
+          href="/"
+          className="flex items-center justify-between w-full py-1.5 px-3 text-[11px] text-neutral-400 hover:text-white hover:bg-surface-elevated/50 rounded transition"
+        >
+          <span>← Brand & Overview</span>
+          <span className="text-[10px] font-mono text-purple-400">Public</span>
         </Link>
       </div>
 
