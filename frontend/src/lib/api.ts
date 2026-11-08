@@ -1,7 +1,11 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+// Normalize API Base URL: guarantees /api suffix and eliminates trailing slashes
+const rawBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+const cleanBase = rawBase.trim().replace(/\/+$/, "");
+const API_BASE = cleanBase.endsWith("/api") ? cleanBase : `${cleanBase}/api`;
 
 export async function fetchApi(endpoint: string, options: RequestInit = {}) {
-  const url = `${API_BASE}${endpoint}`;
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = `${API_BASE}${cleanEndpoint}`;
   try {
     const res = await fetch(url, {
       ...options,
@@ -15,8 +19,12 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
       throw new Error(err.detail || `HTTP Error ${res.status}`);
     }
     return await res.json();
-  } catch (error) {
+  } catch (error: any) {
     console.error(`API call failed for ${endpoint}:`, error);
+    // Provide actionable advice for Render free-tier cold starts
+    if (error?.message?.includes("Failed to fetch") || error?.name === "TypeError") {
+      throw new Error("Unable to reach PRECEDENT API. If the service was recently idle, Render may take ~30-50s to wake from sleep.");
+    }
     throw error;
   }
 }

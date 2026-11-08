@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
@@ -46,14 +47,41 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Enable CORS for Next.js frontend
+# Parse explicit CORS allowlist
+allowed_origins = [o.strip() for o in settings.CORS_ORIGINS.split(",") if o.strip()]
+if settings.ENVIRONMENT != "production":
+    for dev_origin in ["http://localhost:3000", "http://127.0.0.1:3000"]:
+        if dev_origin not in allowed_origins:
+            allowed_origins.append(dev_origin)
+
+# Enable Production CORS with explicit allowlist (no wildcard credentials)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=allowed_origins or ["*"],
+    allow_credentials=True if allowed_origins else False,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
+
+# Global error handler in production to prevent stack trace leaks
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    logger.error(f"Unhandled error processing {request.method} {request.url.path}: {exc}", exc_info=(settings.ENVIRONMENT != "production"))
+    if settings.ENVIRONMENT == "production":
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "An internal server error occurred. Please contact system support."}
+        )
+    return JSONResponse(
+        status_code=500,
+        content={"detail": str(exc)}
+    )
+
+# Readiness probe for Render zero-downtime deploys
+@app.get("/ready")
+@app.get(f"{settings.API_PREFIX}/ready")
+def readiness_probe():
+    return {"status": "ready", "product": settings.PROJECT_NAME, "version": settings.VERSION}
 
 # Include all API routers under /api
 app.include_router(health.router, prefix=settings.API_PREFIX)

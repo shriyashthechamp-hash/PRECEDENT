@@ -14,7 +14,7 @@ async def check_system_health(db: Session = Depends(get_db)):
     try:
         db.execute(text("SELECT 1"))
     except Exception as e:
-        db_status = f"unhealthy: {str(e)}"
+        db_status = "unhealthy" if settings.ENVIRONMENT == "production" else f"unhealthy: {str(e)}"
 
     # 2. Hindsight check
     hindsight_info = await hindsight_service.check_health()

@@ -9,6 +9,9 @@ from app.services.rfp_parser import rfp_parser_service
 
 router = APIRouter(prefix="/rfp", tags=["RFP Ingestion & Workspace"])
 
+ALLOWED_EXTENSIONS = {".pdf", ".docx", ".doc", ".txt"}
+MAX_FILE_SIZE = 25 * 1024 * 1024  # 25 MB
+
 @router.post("/ingest")
 async def ingest_rfp_file(
     file: UploadFile = File(...),
@@ -22,9 +25,22 @@ async def ingest_rfp_file(
     Ingests an RFP document (PDF or DOCX), parses sections, extracts line-item requirements,
     and establishes a structured proposal workspace.
     """
+    filename = file.filename or "uploaded_rfp.pdf"
+    _, ext = os.path.splitext(filename.lower())
+    if ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file format '{ext}'. Allowed extensions are: {', '.join(sorted(ALLOWED_EXTENSIONS))}"
+        )
+
     try:
         content = await file.read()
-        parsed_data = rfp_parser_service.parse_file(content, file.filename or "uploaded_rfp.pdf")
+        if len(content) > MAX_FILE_SIZE:
+            raise HTTPException(
+                status_code=413,
+                detail=f"Uploaded file exceeds maximum permitted size of 25MB (received {len(content) / (1024*1024):.1f}MB)."
+            )
+        parsed_data = rfp_parser_service.parse_file(content, filename)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:

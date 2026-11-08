@@ -27,9 +27,13 @@ class Settings(BaseSettings):
     # Environment
     ENVIRONMENT: str = "development"
     LOG_LEVEL: str = "INFO"
+    PORT: int = 8000
     
     # Database
     DATABASE_URL: str = "sqlite:///./precedent.db"
+    
+    # CORS Allowlist (Comma-separated)
+    CORS_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000"
     
     # AI Inference (Groq)
     GROQ_API_KEY: Optional[str] = None
