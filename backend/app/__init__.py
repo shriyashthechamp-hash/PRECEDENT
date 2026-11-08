@@ -1,0 +1,3 @@
+"""
+PRECEDENT — Institutional Intelligence Engine
+"""

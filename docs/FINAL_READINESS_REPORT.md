@@ -145,3 +145,30 @@ Route (app)                                 Size  First Load JS
 ```
 - Backend API: `http://localhost:8000` (Swagger docs: `http://localhost:8000/docs`)
 - Frontend Web App: `http://localhost:3000`
+
+---
+
+## 7. Render Deployment Post-Mortem & Hardening
+
+### Root Cause of `ModuleNotFoundError: No module named 'app'`
+1. **Working Directory & Path Collision**: In Render, when `rootDir: backend` is specified (or set in the Render Dashboard), the deployment runner already executes commands from inside `/opt/render/project/src/backend`. Passing `--app-dir backend` caused Uvicorn to look for `/opt/render/project/src/backend/backend`, which does not exist, causing Python's module search to fail to find `app`.
+2. **Missing Package Initialization (`__init__.py`)**: `backend/app/` and its subdirectories (`routers/`, `schemas/`, `services/`) lacked `__init__.py` files, relying solely on implicit namespace packages which fail under certain subprocess spawning modes.
+3. **Python Runtime Mismatch**: Render defaulted to Python 3.14.x because no `.python-version` file was present.
+4. **Multiprocessing Worker Complexity**: Running `--workers 2` during initial deployment complicated startup diagnostics.
+
+### Remediation Implemented
+1. **Directory Alignment**:
+   - For Render configured with **Root Directory: `backend`**:
+     - **Build Command**: `pip install --upgrade pip && pip install -r requirements.txt`
+     - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT` (single worker, binds to `0.0.0.0`, dynamic `$PORT`).
+2. **Package Normalization**:
+   - Created `backend/app/__init__.py`, `backend/app/routers/__init__.py`, `backend/app/schemas/__init__.py`, and `backend/app/services/__init__.py`.
+   - Created root export `backend/main.py` (`from app.main import app`) to provide dual-path entrypoint support.
+3. **Python Version Pinning**:
+   - Created `.python-version` (in both repo root and `backend/`) pinned to stable LTS `3.12.8`.
+   - Updated `render.yaml` with `PYTHON_VERSION: 3.12.8`.
+4. **Application Verification**:
+   - Backend Pytest: 15 passed, 1 skipped (honest live Hindsight external daemon check).
+   - Frontend Next.js build: 15/15 routes compiled in 904ms, 0 errors.
+   - Verified `/api/health`, `/ready`, and `/docs` startup endpoints.
+

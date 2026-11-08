@@ -1,5 +1,11 @@
-// Normalize API Base URL: guarantees /api suffix and eliminates trailing slashes
-const rawBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+// Normalize API Base URL:
+// 1. Server-side (SSR / Server Actions): Uses the Vercel internal service binding `PRECEDENT_API_URL`
+// 2. Client-side (Browser): Uses the shared domain path `/api` (or NEXT_PUBLIC_API_URL if set)
+// 3. Local standalone development: Falls back to http://localhost:8000/api
+const isServer = typeof window === "undefined";
+const rawBase = isServer
+  ? (process.env.PRECEDENT_API_URL ? `${process.env.PRECEDENT_API_URL}/api` : (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"))
+  : (process.env.NEXT_PUBLIC_API_URL || "/api");
 const cleanBase = rawBase.trim().replace(/\/+$/, "");
 const API_BASE = cleanBase.endsWith("/api") ? cleanBase : `${cleanBase}/api`;
 

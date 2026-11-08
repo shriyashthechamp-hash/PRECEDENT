@@ -72,16 +72,16 @@ If you prefer provisioning services manually:
    - **Name:** `precedent-api`
    - **Region:** Same region as your database
    - **Branch:** `main`
-   - **Root Directory:** *(leave blank or set to `.`; we execute from root)*
+   - **Root Directory:** `backend`
    - **Runtime:** `Python 3`
-   - **Build Command:** `pip install --upgrade pip && pip install -r backend/requirements.txt`
-   - **Start Command:** `uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port $PORT --workers 2`
+   - **Build Command:** `pip install --upgrade pip && pip install -r requirements.txt`
+   - **Start Command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
    - **Plan:** Free
 4. Click **Advanced** → **Add Environment Variable**:
 
 | Variable Name | Value | Description |
 | :--- | :--- | :--- |
-| `PYTHON_VERSION` | `3.11.9` | Pinned Python runtime |
+| `PYTHON_VERSION` | `3.12.8` | Pinned stable LTS Python runtime |
 | `ENVIRONMENT` | `production` | Enables production security & redacts traces |
 | `DATABASE_URL` | *Paste Internal Database URL* | Connects backend to Render PostgreSQL |
 | `GROQ_API_KEY` | `gsk_...` | Groq inference key |
@@ -180,3 +180,4 @@ curl -s https://<YOUR-RENDER-URL>.onrender.com/api/memory/status | jq .
 | **CORS errors in browser console** | `CORS_ORIGINS` on Render does not match Vercel URL | In Render env settings, update `CORS_ORIGINS` with exact Vercel origin. Save and restart. |
 | **Render cold start delay (50s)** | Render Free Tier spins down inactive instances | The frontend displays a persistent connecting indicator. Service responds normally once warm. |
 | **SQLAlchemy connection error** | Render URL starts with `postgres://` | Backend automatically rewrites `postgres://` to `postgresql://` in `database.py`. Ensure `psycopg2-binary` is installed. |
+

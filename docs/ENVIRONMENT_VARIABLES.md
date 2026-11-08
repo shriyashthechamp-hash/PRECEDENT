@@ -9,6 +9,7 @@ This document defines the definitive environment variable inventory for PRECEDEN
 | Variable Name | Service | Visibility | Required in Prod? | Phase Consumed | Example Production Value | Purpose & Notes |
 |---|---|---|---|---|---|---|
 | `PORT` | Backend (Render) | Private | Injected by Render | Runtime | `10000` | Port on which FastAPI binds. Automatically provided by Render runtime. |
+| `PYTHON_VERSION` | Backend (Render) | Private | **Yes** | Build | `3.12.8` | Pinned stable LTS Python runtime on Render. |
 | `ENVIRONMENT` | Backend (Render) | Private | **Yes** | Runtime | `production` | Switches off stack traces, enforces CORS allowlist, hardens error responses. |
 | `LOG_LEVEL` | Backend (Render) | Private | Optional | Runtime | `INFO` | Logging verbosity (`INFO`, `WARNING`, `ERROR`). |
 | `DATABASE_URL` | Backend (Render) | **Secret** | **Yes** | Runtime | `postgresql://user:pass@host:5432/db` | Connection string to Render Managed PostgreSQL or Persistent Disk SQLite. |

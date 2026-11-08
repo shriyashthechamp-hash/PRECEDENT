@@ -13,6 +13,7 @@ PYTHONPATH=. .venv/bin/pytest tests/ -v
 
 echo "[2/2] Running Frontend Build Validation..."
 cd "$DIR/frontend"
+rm -rf .next
 pnpm build
 
 echo "=========================================================="
