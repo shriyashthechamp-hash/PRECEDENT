@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DotTile } from "./DotTile";
+import { DotTiles, DotTileData } from "@/components/ui/dot-tiles";
 import { api } from "@/lib/api";
 import { Info } from "lucide-react";
 
@@ -44,6 +44,93 @@ export function DotTilesSection() {
     fetchLiveMetrics();
   }, []);
 
+  const tiles: DotTileData[] = [
+    {
+      id: "tile-memory",
+      title: "Retained Experiences",
+      value: metrics.retainedExperiences,
+      unit: "EXP",
+      icon: "memory",
+      visual: "dots",
+      progress: 88,
+      status: "Hindsight Memory",
+      change: "+12 verified entries",
+      color: "violet",
+      description: "Verified domain lead review decisions stored with full context & rationale.",
+      dataPoints: [10, 24, 38, 55, 78, 96, 114, metrics.retainedExperiences]
+    },
+    {
+      id: "tile-proposal",
+      title: "Proposals & RFPs Processed",
+      value: metrics.proposalsProcessed,
+      unit: "RFPS",
+      icon: "proposal",
+      visual: "slider",
+      progress: 72,
+      status: "Proposal Intelligence",
+      change: "Active enterprise pipelines",
+      color: "teal",
+      description: "Multi-section RFP specifications parsed into structured proposal workspaces.",
+      dataPoints: [2, 4, 7, 9, 12, 14, 16, metrics.proposalsProcessed]
+    },
+    {
+      id: "tile-precedent",
+      title: "Precedents Recalled into Drafts",
+      value: metrics.precedentsRecalled,
+      unit: "RECALLS",
+      icon: "sparkles",
+      visual: "rise",
+      progress: 94,
+      status: "Precedent Grounding",
+      change: "96.4% contextual relevance",
+      color: "violet",
+      description: "Historical revisions injected into active prompt context across cross-bid generation.",
+      dataPoints: [15, 28, 42, 53, 67, 74, 80, metrics.precedentsRecalled]
+    },
+    {
+      id: "tile-decision",
+      title: "Approved Human Corrections",
+      value: metrics.approvedCorrections,
+      unit: "DECISIONS",
+      icon: "decision",
+      visual: "steps",
+      progress: 84,
+      status: "Review Intelligence",
+      change: "Human-in-the-loop validated",
+      color: "emerald",
+      description: "Domain lead amendments transformed into durable organizational policy.",
+      dataPoints: [5, 12, 19, 26, 33, 38, 40, metrics.approvedCorrections]
+    },
+    {
+      id: "tile-contradiction",
+      title: "Contradictions Defended",
+      value: metrics.contradictionsDefended,
+      unit: "GATED",
+      icon: "shield",
+      visual: "blocks",
+      progress: 100,
+      status: "Contradiction Defense",
+      change: "Zero client concessions leaked",
+      color: "conflict",
+      description: "Inconsistent pricing, SLA, and compliance claims caught before bid submission.",
+      dataPoints: [1, 3, 4, 8, 11, 13, 15, metrics.contradictionsDefended]
+    },
+    {
+      id: "tile-efficiency",
+      title: "Reviewer Edit Reduction Rate",
+      value: metrics.editReductionRate,
+      unit: "%",
+      icon: "learning",
+      visual: "rise",
+      progress: metrics.editReductionRate,
+      status: "Empirical Efficiency",
+      change: "Measured character delta",
+      color: "teal",
+      description: "Reduction in characters edited by domain reviewers on memory-grounded proposals.",
+      dataPoints: [18, 24, 31, 37, 41, 44, 45, metrics.editReductionRate]
+    }
+  ];
+
   return (
     <section id="metrics" className="py-24 border-b border-white/[0.08] relative overflow-hidden bg-[#08090D]">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
@@ -76,74 +163,7 @@ export function DotTilesSection() {
         </div>
 
         {/* 6 DotTiles in an Instrument Panel Layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <DotTile
-            category="Hindsight Memory"
-            title="Retained Experiences"
-            value={metrics.retainedExperiences}
-            indicatorColor="violet"
-            visualizationType="matrix"
-            trend="+12 this cycle"
-            description="Verified domain lead review decisions stored with full context & rationale."
-            dataPoints={[10, 24, 38, 55, 78, 96, 114, metrics.retainedExperiences]}
-          />
-
-          <DotTile
-            category="Proposal Intelligence"
-            title="Proposals & RFPs Processed"
-            value={metrics.proposalsProcessed}
-            indicatorColor="teal"
-            visualizationType="sparkline"
-            trend="Active enterprise pipelines"
-            description="Multi-section RFP specifications parsed into structured proposal workspaces."
-            dataPoints={[2, 4, 7, 9, 12, 14, 16, metrics.proposalsProcessed]}
-          />
-
-          <DotTile
-            category="Precedent Grounding"
-            title="Precedents Recalled"
-            value={metrics.precedentsRecalled}
-            indicatorColor="violet"
-            visualizationType="sparkline"
-            trend="96.4% contextual relevance"
-            description="Historical revisions injected into active prompt context across cross-bid generation."
-            dataPoints={[15, 28, 42, 53, 67, 74, 80, metrics.precedentsRecalled]}
-          />
-
-          <DotTile
-            category="Review Intelligence"
-            title="Approved Human Corrections"
-            value={metrics.approvedCorrections}
-            indicatorColor="emerald"
-            visualizationType="bars"
-            trend="Human-in-the-loop verified"
-            description="Domain lead amendments transformed into durable organizational policy."
-            dataPoints={[5, 12, 19, 26, 33, 38, 40, metrics.approvedCorrections]}
-          />
-
-          <DotTile
-            category="Contradiction Defense"
-            title="Contradictions Prevented"
-            value={metrics.contradictionsDefended}
-            indicatorColor="conflict"
-            visualizationType="ring"
-            trend="Hard submission blocking"
-            description="Inconsistent pricing, SLA, and compliance claims caught before bid submission."
-            dataPoints={[1, 3, 4, 8, 11, 13, 15, metrics.contradictionsDefended]}
-          />
-
-          <DotTile
-            category="Empirical Efficiency"
-            title="Reviewer Edit Reduction Rate"
-            value={metrics.editReductionRate}
-            suffix="%"
-            indicatorColor="teal"
-            visualizationType="bars"
-            trend="Measured A/B character delta"
-            description="Reduction in characters edited by domain reviewers on memory-grounded proposals."
-            dataPoints={[18, 24, 31, 37, 41, 44, 45, metrics.editReductionRate]}
-          />
-        </div>
+        <DotTiles tiles={tiles} columns={3} />
 
         {/* Footnote Disclosing Benchmark Grounding */}
         <div className="mt-8 text-center text-xs text-[#9295A1] font-mono">

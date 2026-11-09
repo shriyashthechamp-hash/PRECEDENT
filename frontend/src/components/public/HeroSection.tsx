@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import { ArrowRight, Sparkles, BrainCircuit, ShieldCheck, CheckCircle2, AlertTriangle, Layers, Database } from "lucide-react";
+import { WaveAnimation } from "@/components/ui/wave-animation";
 
 export function HeroSection() {
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+      {/* Animated Wave Background */}
+      <WaveAnimation className="absolute inset-0 z-0" opacity={0.35} />
+
       {/* Subtle Aurora Lighting Backdrops */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] pointer-events-none opacity-60">
         <div className="absolute inset-0 bg-gradient-to-tr from-aurora-violet/15 via-transparent to-aurora-teal/10 blur-[120px] rounded-full" />

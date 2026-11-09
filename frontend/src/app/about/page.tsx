@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { PublicNavbar } from "@/components/public/PublicNavbar";
 import { PublicFooter } from "@/components/public/PublicFooter";
+import { WaveAnimation } from "@/components/ui/wave-animation";
 import {
   ArrowRight,
   BrainCircuit,
@@ -24,6 +25,9 @@ export default function AboutPage() {
       <PublicNavbar />
 
       <main className="pt-32 pb-24 relative overflow-hidden">
+        {/* Subtle Wave Canvas Ambient Backdrop */}
+        <WaveAnimation className="absolute top-0 left-0 right-0 h-[480px] z-0" opacity={0.2} />
+
         {/* Subtle Atmospheric Gradient */}
         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-r from-aurora-violet/10 via-transparent to-aurora-teal/10 blur-[140px] pointer-events-none rounded-full" />
 
