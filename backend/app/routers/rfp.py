@@ -41,6 +41,8 @@ async def ingest_rfp_file(
                 detail=f"Uploaded file exceeds maximum permitted size of 25MB (received {len(content) / (1024*1024):.1f}MB)."
             )
         parsed_data = rfp_parser_service.parse_file(content, filename)
+    except HTTPException:
+        raise
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
