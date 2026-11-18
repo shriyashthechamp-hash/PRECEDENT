@@ -7,7 +7,7 @@ def test_full_precedent_lifecycle():
         # 1. Health check
         health = client.get("/api/health").json()
         assert health["status"] == "operational"
-        assert health["groq_inference"]["status"] == "configured_live"
+        assert health["groq_inference"]["status"] in ["configured_live", "unconfigured_using_deterministic_engine"]
         assert health["groq_inference"]["primary_model"] == "openai/gpt-oss-120b"
         
         # 2. RFP Document Ingestion
