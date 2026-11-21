@@ -99,4 +99,6 @@ This demonstration walks through the exact 9-step institutional learning cycle v
   ```bash
   ./scripts/test.sh
   ```
-  14/14 tests pass in ~1.3 seconds.
+  Runs the backend pytest suite (40 cases collected; 39 pass + 1 optional live-Hindsight skip when no
+  daemon is running), the 24 frontend regression tests, TypeScript checking, and the production build.
+  See [`TESTING.md`](TESTING.md) for the current coverage matrix.
