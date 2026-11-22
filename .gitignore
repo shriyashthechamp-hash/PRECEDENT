@@ -9,6 +9,15 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Test and tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage/
+htmlcov/
+*.egg-info/
+
 # Next.js build output
 .next/
 out/
