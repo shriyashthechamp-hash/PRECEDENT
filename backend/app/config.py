@@ -1,3 +1,8 @@
+"""Application settings loaded from environment variables and ``.env`` files.
+
+``.env`` is searched in the repository root, then ``backend/``, then the current
+working directory. Values already present in the environment take precedence.
+"""
 import os
 from pathlib import Path
 from dotenv import load_dotenv

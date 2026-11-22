@@ -1,3 +1,9 @@
+"""SQLAlchemy engine, session factory, and declarative base.
+
+The connection string comes from ``settings.DATABASE_URL`` and supports both
+SQLite and PostgreSQL. SQLite is configured with ``check_same_thread=False``;
+other engines use connection pooling with ``pool_pre_ping``.
+"""
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from datetime import datetime, timezone
