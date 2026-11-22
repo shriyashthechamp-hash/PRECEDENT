@@ -6,6 +6,7 @@ index to go deeper.
 | Document | What it covers |
 |----------|----------------|
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Frontend/backend architecture, API surface, ingestion, generation, memory, contradiction detection, data model (with a Mermaid diagram). |
+| [API_REFERENCE.md](API_REFERENCE.md) | Endpoint reference: method, path, purpose, and request/response shapes. |
 | [DEVELOPMENT.md](DEVELOPMENT.md) | Prerequisites, installation, environment setup, running the services, tests, and troubleshooting. |
 | [DEMO_GUIDE.md](DEMO_GUIDE.md) | Step-by-step demonstration of the working end-to-end workflows. |
 | [DEMO_SCRIPT.md](DEMO_SCRIPT.md) | A narrative demo script of the 9-step institutional learning cycle. |

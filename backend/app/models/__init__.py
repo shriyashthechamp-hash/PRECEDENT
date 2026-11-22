@@ -1,3 +1,4 @@
+"""SQLAlchemy ORM models, re-exported here for convenient imports."""
 from app.models.client import Client, Sector, CompanyProfile
 from app.models.proposal import Proposal, RfpQuestion, ProposalResponse, ProposalStatus, ResponseStatus, QuestionCategory
 from app.models.review import ReviewCorrectionEvent, ReviewEventStatus

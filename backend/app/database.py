@@ -1,9 +1,16 @@
+"""SQLAlchemy engine, session factory, and declarative base.
+
+The connection string comes from ``settings.DATABASE_URL`` and supports both
+SQLite and PostgreSQL. SQLite is configured with ``check_same_thread=False``;
+other engines use connection pooling with ``pool_pre_ping``.
+"""
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from datetime import datetime, timezone
+from typing import Generator
 from app.config import settings
 
-def utc_now():
+def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 # Render provides postgres:// which SQLAlchemy 2.0+ requires as postgresql://
@@ -28,7 +35,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
-def get_db():
+def get_db() -> Generator[Session, None, None]:
     db = SessionLocal()
     try:
         yield db
